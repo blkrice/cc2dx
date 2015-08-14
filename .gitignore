@@ -8,3 +8,4 @@ Debug.win32
 *.opensdf
 *.sdf
 *.suo
+CMakeLists.txt

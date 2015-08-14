@@ -25,6 +25,8 @@ private:
 	spine::SkeletonAnimation *_node = NULL;
 	int _nowAnimation = 0;
 	void PlayAnimatioin(const int __index);
+
+	void CallbackBackButton(cocos2d::Ref* pSender);
 };
 
 #endif

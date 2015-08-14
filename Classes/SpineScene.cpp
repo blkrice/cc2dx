@@ -1,4 +1,5 @@
 #include "SpineScene.h"
+#include "EntryScene.h"
 
 USING_NS_CC;
 
@@ -46,6 +47,15 @@ bool SpineSceneMainLayer::init()
 		this->addChild(_node, 10);
 		PlayAnimatioin(0);
 	}
+
+	auto backButton = MenuItemLabel::create(
+		Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 15), CC_CALLBACK_1(SpineSceneMainLayer::CallbackBackButton, this)
+		);
+	backButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
+
+	auto menu = Menu::create(backButton, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
 
 	return true;
 }
@@ -110,4 +120,10 @@ void SpineSceneMainLayer::PlayAnimatioin(const int __index)
 	}
 
 	_node->setAnimation(0, AnimationName[_nowAnimation], AnimationLoop[_nowAnimation]);
+}
+
+void SpineSceneMainLayer::CallbackBackButton(Ref* pSender)
+{
+	Scene * entryScene = EntrySceneMainLayer::createScene();
+	Director::getInstance()->replaceScene(entryScene);
 }
