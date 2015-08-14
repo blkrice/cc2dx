@@ -12,12 +12,6 @@ public:
 
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
-
-	virtual bool onTouchBegan(cocos2d::Touch *__touch, cocos2d::Event *__evnt) override;
-	virtual void onTouchMoved(cocos2d::Touch *__touch, cocos2d::Event *__evnt) override;
-	virtual void onTouchEnded(cocos2d::Touch *__touch, cocos2d::Event *__evnt) override;
-
-	void onKeyPressed(cocos2d::EventKeyboard::KeyCode __code, cocos2d::Event *__evnt) override;
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
@@ -26,11 +20,9 @@ public:
 	CREATE_FUNC(EntrySceneMainLayer);
 
 private:
-	void ShutDownApp();
+	const std::string CommonTTF = "fonts/Marker Felt.ttf";
 
-	spine::SkeletonAnimation *_spineNode = NULL;
-	int _spineAnimationNow = 0;
-	void PlayAnimatioin(const int __index);
+	void ChangeSceneMenuCallback(cocos2d::Ref *__sender);
 };
 
 #endif // entry_scene__h

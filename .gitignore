@@ -7,3 +7,4 @@ proj.win10
 Debug.win32
 *.opensdf
 *.sdf
+*.suo

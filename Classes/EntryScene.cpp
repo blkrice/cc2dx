@@ -1,5 +1,7 @@
 #include "EntryScene.h"
 
+#include "SpineScene.h"
+
 USING_NS_CC;
 
 Scene* EntrySceneMainLayer::createScene()
@@ -46,7 +48,16 @@ bool EntrySceneMainLayer::init()
     // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+	this->addChild(menu, 1, "menu");
+
+	{
+		auto spineSceneButton = MenuItemLabel::create(
+			Label::createWithTTF("# Spine Test", CommonTTF, 15)
+			, CC_CALLBACK_1(EntrySceneMainLayer::ChangeSceneMenuCallback, this)
+			);
+		spineSceneButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
+		menu->addChild(spineSceneButton, 2, "spine");
+	}
 
     /////////////////////////////
     // 3. add your codes below...
@@ -54,7 +65,7 @@ bool EntrySceneMainLayer::init()
     // add a label shows "Hello World"
     // create and initialize a label
     
-    auto label = Label::createWithTTF("Cocos2d-X", "fonts/Marker Felt.ttf", 24);
+	auto label = Label::createWithTTF("Cocos2d-X", CommonTTF, 24);
     
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
@@ -71,70 +82,11 @@ bool EntrySceneMainLayer::init()
 
     // add the sprite as a child to this layer
 	this->addChild(sprite, 0);
-
-	EventListenerKeyboard *keyListener = EventListenerKeyboard::create();
-	keyListener->onKeyPressed = CC_CALLBACK_2(EntrySceneMainLayer::onKeyPressed, this);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
-
-	EventListenerTouchOneByOne *touchListener = EventListenerTouchOneByOne::create();
-	touchListener->setSwallowTouches(true);
-	touchListener->onTouchBegan = CC_CALLBACK_2(EntrySceneMainLayer::onTouchBegan, this);
-	touchListener->onTouchMoved = CC_CALLBACK_2(EntrySceneMainLayer::onTouchMoved, this);
-	touchListener->onTouchEnded = CC_CALLBACK_2(EntrySceneMainLayer::onTouchEnded, this);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
-
-	{
-		_spineNode = spine::SkeletonAnimation::createWithFile("animation/raptor.json", "animation/raptor.atlas", 0.25f);
-
-		_spineNode->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y - 150.f));
-		this->addChild(_spineNode, 10);
-		PlayAnimatioin(0);
-	}
     
     return true;
 }
 
-bool EntrySceneMainLayer::onTouchBegan(Touch *__touch, Event *__evnt)
-{
-	return true;
-}
-
-void EntrySceneMainLayer::onTouchMoved(Touch *__touch, Event *__evnt)
-{
-}
-
-void EntrySceneMainLayer::onTouchEnded(Touch *__touch, Event *__evnt)
-{
-	PlayAnimatioin(_spineAnimationNow + 1);
-}
-
-void EntrySceneMainLayer::onKeyPressed(EventKeyboard::KeyCode __code, Event *__evnt)
-{
-	if (
-		EventKeyboard::KeyCode::KEY_ESCAPE == __code
-#if ( CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
-		|| EventKeyboard::KeyCode::KEY_BACK == __code
-#endif
-		)
-	{
-		ShutDownApp();
-	}
-	else
-	{
-		if (EventKeyboard::KeyCode::KEY_1 <= __code && EventKeyboard::KeyCode::KEY_7 >= __code)
-		{
-			int listIndex = (int)__code - (int)EventKeyboard::KeyCode::KEY_1;
-			PlayAnimatioin(listIndex);
-		}
-	}
-}
-
 void EntrySceneMainLayer::menuCloseCallback(Ref* pSender)
-{
-	ShutDownApp();
-}
-
-void EntrySceneMainLayer::ShutDownApp()
 {
 	Director::getInstance()->end();
 
@@ -143,20 +95,13 @@ void EntrySceneMainLayer::ShutDownApp()
 #endif
 }
 
-void EntrySceneMainLayer::PlayAnimatioin(const int __index)
+void EntrySceneMainLayer::ChangeSceneMenuCallback(cocos2d::Ref *__sender)
 {
-	enum { ANIMATION_COUNT = 2 };
-	const std::string AnimationName[ANIMATION_COUNT] =
-	{
-		"walk", "gungrab"
-	};
-	const bool AnimationLoop[ANIMATION_COUNT] = { true, false };
+	Menu *menu = (Menu *)this->getChildByName("menu");
 
-	_spineAnimationNow = __index;
-	if (ANIMATION_COUNT == _spineAnimationNow)
+	if (__sender == menu->getChildByName("spine"))
 	{
-		_spineAnimationNow = 0;
+		Scene * spineScene = SpineSceneMainLayer::createScene();
+		Director::getInstance()->replaceScene(spineScene);
 	}
-
-	_spineNode->setAnimation(0, AnimationName[_spineAnimationNow], AnimationLoop[_spineAnimationNow]);
 }

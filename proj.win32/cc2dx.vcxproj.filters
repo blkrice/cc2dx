@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\addition">
+      <UniqueIdentifier>{1bfd9e10-77c0-4b59-a6c8-b1ddabbe61d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,6 +24,9 @@
     <ClCompile Include="..\Classes\EntryScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SpineScene.cpp">
+      <Filter>src\addition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -31,6 +37,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\EntryScene.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SpineScene.h">
+      <Filter>src\addition</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
