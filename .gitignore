@@ -4,3 +4,6 @@ proj.ios_mac
 proj.linux
 proj.win8.1-universal
 proj.win10
+Debug.win32
+*.opensdf
+*.sdf
