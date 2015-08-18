@@ -52,6 +52,7 @@ bool SpineSceneMainLayer::init()
 		Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 15), CC_CALLBACK_1(SpineSceneMainLayer::CallbackBackButton, this)
 		);
 	backButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
+	backButton->setColor(Color3B::RED);
 
 	auto menu = Menu::create(backButton, NULL);
 	menu->setPosition(Vec2::ZERO);

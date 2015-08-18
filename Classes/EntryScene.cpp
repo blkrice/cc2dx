@@ -56,6 +56,7 @@ bool EntrySceneMainLayer::init()
 			, CC_CALLBACK_1(EntrySceneMainLayer::ChangeSceneMenuCallback, this)
 			);
 		spineSceneButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
+		spineSceneButton->setColor(Color3B::RED);
 		menu->addChild(spineSceneButton, 2, "spine");
 	}
 

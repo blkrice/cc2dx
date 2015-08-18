@@ -10,3 +10,9 @@ Debug.win32
 *.suo
 CMakeLists.txt
 *.apk
+assets
+bin
+gen
+proj.android/local.properties
+libs
+obj
