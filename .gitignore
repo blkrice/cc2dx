@@ -9,3 +9,4 @@ Debug.win32
 *.sdf
 *.suo
 CMakeLists.txt
+*.apk
