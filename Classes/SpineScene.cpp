@@ -28,8 +28,8 @@ bool SpineSceneMainLayer::init()
 		origin.y + visibleSize.height - label->getContentSize().height));
 
 	this->addChild(label, 1);
-
-	{
+	
+	{//spine
 		_node = spine::SkeletonAnimation::createWithFile("animation/raptor.json", "animation/raptor.atlas", 0.25f);
 
 		_node->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y - 150.f));
@@ -37,25 +37,29 @@ bool SpineSceneMainLayer::init()
 		_node->setAnimation(0, "walk", true);
 	}
 
-	this->setKeypadEnabled(true);
+	{//event listener
+		this->setKeypadEnabled(true);
 
-	EventListenerTouchOneByOne *listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = [this](Touch *__touch, Event *__evt) -> bool
-	{
-		_node->setAnimation(1, "gungrab", false);
-		return true;
-	};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+		EventListenerTouchOneByOne *listener = EventListenerTouchOneByOne::create();
+		listener->onTouchBegan = [this](Touch *__touch, Event *__evt) -> bool
+		{
+			_node->setAnimation(1, "gungrab", false);
+			return true;
+		};
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+	}
 
-	auto backButton = MenuItemLabel::create(
-		Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 15), CC_CALLBACK_1(SpineSceneMainLayer::CallbackBackButton, this)
-		);
-	backButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
-	backButton->setColor(Color3B::RED);
+	{//menu
+		auto backButton = MenuItemLabel::create(
+			Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 15), CC_CALLBACK_1(SpineSceneMainLayer::CallbackBackButton, this)
+			);
+		backButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
+		backButton->setColor(Color3B::RED);
 
-	auto menu = Menu::create(backButton, NULL);
-	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, 1);
+		auto menu = Menu::create(backButton, NULL);
+		menu->setPosition(Vec2::ZERO);
+		this->addChild(menu, 1);
+	}
 
 	return true;
 }

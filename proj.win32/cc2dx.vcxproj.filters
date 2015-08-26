@@ -27,6 +27,9 @@
     <ClCompile Include="..\Classes\SpineScene.cpp">
       <Filter>src\addition</Filter>
     </ClCompile>
+    <ClCompile Include="ParallaxScene.cpp">
+      <Filter>src\addition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -39,6 +42,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SpineScene.h">
+      <Filter>src\addition</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallaxScene.h">
       <Filter>src\addition</Filter>
     </ClInclude>
   </ItemGroup>
