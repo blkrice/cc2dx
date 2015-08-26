@@ -1,6 +1,7 @@
 #include "EntryScene.h"
 
 #include "SpineScene.h"
+#include "ParallaxScene.h"
 
 USING_NS_CC;
 
@@ -55,9 +56,17 @@ bool EntrySceneMainLayer::init()
 			Label::createWithTTF("# Spine Test", CommonTTF, 15)
 			, CC_CALLBACK_1(EntrySceneMainLayer::ChangeSceneMenuCallback, this)
 			);
-		spineSceneButton->setPosition(Vec2(50.f, visibleSize.height - 50.f));
+		spineSceneButton->setPosition(Vec2(100.f, visibleSize.height - 50.f));
 		spineSceneButton->setColor(Color3B::RED);
 		menu->addChild(spineSceneButton, 2, "spine");
+
+		auto parallaxSceneButton = MenuItemLabel::create(
+			Label::createWithTTF("# ParallaxNode Test", CommonTTF, 15)
+			, CC_CALLBACK_1(EntrySceneMainLayer::ChangeSceneMenuCallback, this)
+			);
+		parallaxSceneButton->setPosition(Vec2(100.f, visibleSize.height - 75.f));
+		parallaxSceneButton->setColor(Color3B::RED);
+		menu->addChild(parallaxSceneButton, 2, "parallax");
 	}
 
     /////////////////////////////
@@ -100,9 +109,15 @@ void EntrySceneMainLayer::ChangeSceneMenuCallback(cocos2d::Ref *__sender)
 {
 	Menu *menu = (Menu *)this->getChildByName("menu");
 
+	Scene *scene = nullptr;
 	if (__sender == menu->getChildByName("spine"))
 	{
-		Scene * spineScene = SpineSceneMainLayer::createScene();
-		Director::getInstance()->replaceScene(spineScene);
+		scene = SpineSceneMainLayer::createScene();
 	}
+	else if (__sender == menu->getChildByName("parallax"))
+	{
+		scene = ParallaxSceneLayer::createScene();
+	}
+
+	Director::getInstance()->replaceScene(scene);
 }
