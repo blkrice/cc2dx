@@ -29,24 +29,23 @@ bool SpineSceneMainLayer::init()
 
 	this->addChild(label, 1);
 
-	EventListenerKeyboard *keyListener = EventListenerKeyboard::create();
-	keyListener->onKeyPressed = CC_CALLBACK_2(SpineSceneMainLayer::onKeyPressed, this);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
-
-	EventListenerTouchOneByOne *touchListener = EventListenerTouchOneByOne::create();
-	touchListener->setSwallowTouches(true);
-	touchListener->onTouchBegan = CC_CALLBACK_2(SpineSceneMainLayer::onTouchBegan, this);
-	touchListener->onTouchMoved = CC_CALLBACK_2(SpineSceneMainLayer::onTouchMoved, this);
-	touchListener->onTouchEnded = CC_CALLBACK_2(SpineSceneMainLayer::onTouchEnded, this);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
-
 	{
 		_node = spine::SkeletonAnimation::createWithFile("animation/raptor.json", "animation/raptor.atlas", 0.25f);
 
 		_node->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y - 150.f));
 		this->addChild(_node, 10);
-		PlayAnimatioin(0);
+		_node->setAnimation(0, "walk", true);
 	}
+
+	this->setKeypadEnabled(true);
+
+	EventListenerTouchOneByOne *listener = EventListenerTouchOneByOne::create();
+	listener->onTouchBegan = [this](Touch *__touch, Event *__evt) -> bool
+	{
+		_node->setAnimation(1, "gungrab", false);
+		return true;
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	auto backButton = MenuItemLabel::create(
 		Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 15), CC_CALLBACK_1(SpineSceneMainLayer::CallbackBackButton, this)
@@ -61,21 +60,7 @@ bool SpineSceneMainLayer::init()
 	return true;
 }
 
-bool SpineSceneMainLayer::onTouchBegan(Touch *__touch, Event *__evnt)
-{
-	return true;
-}
-
-void SpineSceneMainLayer::onTouchMoved(Touch *__touch, Event *__evnt)
-{
-}
-
-void SpineSceneMainLayer::onTouchEnded(Touch *__touch, Event *__evnt)
-{
-	PlayAnimatioin(_nowAnimation + 1);
-}
-
-void SpineSceneMainLayer::onKeyPressed(EventKeyboard::KeyCode __code, Event *__evnt)
+void SpineSceneMainLayer::onKeyReleased(EventKeyboard::KeyCode __code, Event *__evnt)
 {
 	if (
 		EventKeyboard::KeyCode::KEY_ESCAPE == __code
@@ -86,14 +71,6 @@ void SpineSceneMainLayer::onKeyPressed(EventKeyboard::KeyCode __code, Event *__e
 	{
 		ShutDownApp();
 	}
-	else
-	{
-		if (EventKeyboard::KeyCode::KEY_1 <= __code && EventKeyboard::KeyCode::KEY_7 >= __code)
-		{
-			int listIndex = (int)__code - (int)EventKeyboard::KeyCode::KEY_1;
-			PlayAnimatioin(listIndex);
-		}
-	}
 }
 
 void SpineSceneMainLayer::ShutDownApp()
@@ -103,24 +80,6 @@ void SpineSceneMainLayer::ShutDownApp()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif
-}
-
-void SpineSceneMainLayer::PlayAnimatioin(const int __index)
-{
-	enum { ANIMATION_COUNT = 2 };
-	const std::string AnimationName[ANIMATION_COUNT] =
-	{
-		"walk", "gungrab"
-	};
-	const bool AnimationLoop[ANIMATION_COUNT] = { true, false };
-
-	_nowAnimation = __index;
-	if (ANIMATION_COUNT == _nowAnimation)
-	{
-		_nowAnimation = 0;
-	}
-
-	_node->setAnimation(0, AnimationName[_nowAnimation], AnimationLoop[_nowAnimation]);
 }
 
 void SpineSceneMainLayer::CallbackBackButton(Ref* pSender)
